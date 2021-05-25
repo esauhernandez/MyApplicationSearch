@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplicationsearch.data.model.ProductDetail
 import com.example.myapplicationsearch.data.model.QuerySearch
+import com.example.myapplicationsearch.data.model.SearchResponse
 import com.example.myapplicationsearch.databinding.ActivityMainBinding
 import com.example.myapplicationsearch.domain.usecase.UseCaseRoomSearch
 import com.example.myapplicationsearch.view.adapter.ProductAdapter
@@ -20,6 +21,7 @@ import com.example.myapplicationsearch.view.adapter.QueryAdapter
 import com.example.myapplicationsearch.view.viewmodel.RoomViewModel
 import com.example.myapplicationsearch.view.viewmodel.SearchViewModel
 import com.example.myapplicationsearch.view.viewmodel.SearchViewModelFactory
+import okhttp3.internal.notify
 import java.util.*
 
 
@@ -88,6 +90,7 @@ class MainActivity : AppCompatActivity() {
                 var querySearch = QuerySearch(UUID.randomUUID().toString(), mBinding.searchView.editText?.text.toString(), 0L)
                 UseCaseRoomSearch.saveQueryRoom(querySearch, application)
                 viewModelSearch.performSearch(mBinding.searchView.editText?.text.toString().trim())
+                viewModelSearch.mResponse.value = SearchResponse("", "", 0, ArrayList(), "", "", "")
                 disableViews()
             }
         }

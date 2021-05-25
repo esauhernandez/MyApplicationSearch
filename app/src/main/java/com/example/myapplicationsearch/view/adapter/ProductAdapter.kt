@@ -29,7 +29,7 @@ class ProductAdapter (private val products: ArrayList<ProductDetail>) : Recycler
         var mBinding = view
         fun bind(product: ProductDetail) {
             mBinding.product = product
-            mBinding.textView2.text = "$" + product.primaryOffer.maxPrice
+            mBinding.textView2.text = "$" + product.primaryOffer.offerPrice
             Picasso.get().load(product.imageUrl).into(mBinding.imageView);
         }
     }
