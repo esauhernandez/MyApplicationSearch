@@ -98,7 +98,7 @@ class MainActivity : AppCompatActivity() {
                 mViewModelRoom.listQueries.observe(this, Observer {queries ->
                     if(queries.isNotEmpty()){
                         mBinding.recyclerViewQueries.visibility = View.VISIBLE
-                        mAdapterQueries = QueryAdapter(queries.reversed() as java.util.ArrayList<QuerySearch>)
+                        mAdapterQueries = QueryAdapter(queries.reversed())
                         mBinding.recyclerViewQueries.layoutManager = LinearLayoutManager(this)
                         mBinding.recyclerViewQueries.adapter=mAdapterQueries
                     }

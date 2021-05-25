@@ -7,7 +7,7 @@ import com.example.myapplicationsearch.data.model.QuerySearch
 import com.example.myapplicationsearch.databinding.ItemSearchBinding
 import java.util.*
 
-class QueryAdapter(private val queries: ArrayList<QuerySearch>) : RecyclerView.Adapter<QueryAdapter.QueryViewHolder>() {
+class QueryAdapter(private val queries: List<QuerySearch>) : RecyclerView.Adapter<QueryAdapter.QueryViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QueryViewHolder {
         var binding = ItemSearchBinding.inflate(LayoutInflater.from(parent.context), parent, false)
