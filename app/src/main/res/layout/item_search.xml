@@ -6,10 +6,15 @@
     <data>
 
         <import type="com.example.myapplicationsearch.data.model.QuerySearch" />
+        <import type="com.example.myapplicationsearch.view.adapter.OnQueryClickListener" />
 
         <variable
             name="query"
             type="QuerySearch" />
+
+        <variable
+            name="listener"
+            type="OnQueryClickListener" />
 
     </data>
 
@@ -32,6 +37,7 @@
             android:layout_height="wrap_content"
             android:text="@{query.title}"
             android:layout_marginLeft="8dp"
+            android:onClick="@{(view) -> listener.onQueryClick(view, query)}"
             app:layout_constraintBottom_toBottomOf="@+id/btnDelete"
             app:layout_constraintEnd_toStartOf="@+id/btnUseOption"
             app:layout_constraintStart_toEndOf="@+id/btnDelete"
@@ -41,6 +47,7 @@
             android:id="@+id/btnUseOption"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:onClick="@{(view) -> listener.onQueryClick(view, query)}"
             app:layout_constraintBottom_toBottomOf="@+id/btnDelete"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"

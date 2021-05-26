@@ -16,6 +16,7 @@ import com.example.myapplicationsearch.data.model.QuerySearch
 import com.example.myapplicationsearch.data.model.SearchResponse
 import com.example.myapplicationsearch.databinding.ActivityMainBinding
 import com.example.myapplicationsearch.domain.usecase.UseCaseRoomSearch
+import com.example.myapplicationsearch.view.adapter.OnQueryClickListener
 import com.example.myapplicationsearch.view.adapter.ProductAdapter
 import com.example.myapplicationsearch.view.adapter.QueryAdapter
 import com.example.myapplicationsearch.view.viewmodel.RoomViewModel
@@ -25,7 +26,7 @@ import okhttp3.internal.notify
 import java.util.*
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), OnQueryClickListener {
 
     lateinit var mBinding: ActivityMainBinding
 
@@ -86,12 +87,8 @@ class MainActivity : AppCompatActivity() {
             if(mBinding.searchView.editText?.text.toString().trim().isEmpty()){
                 Toast.makeText(this, "Enter query to search", Toast.LENGTH_SHORT).show()
             }else{
-                mBinding.recyclerViewQueries.visibility = View.GONE
                 var querySearch = QuerySearch(UUID.randomUUID().toString(), mBinding.searchView.editText?.text.toString(), 0L)
-                UseCaseRoomSearch.saveQueryRoom(querySearch, application)
-                viewModelSearch.performSearch(mBinding.searchView.editText?.text.toString().trim())
-                viewModelSearch.mResponse.value = SearchResponse("", "", 0, ArrayList(), "", "", "")
-                disableViews()
+                runSearch(querySearch)
             }
         }
 
@@ -101,7 +98,7 @@ class MainActivity : AppCompatActivity() {
                 mViewModelRoom.listQueries.observe(this, Observer {queries ->
                     if(queries.isNotEmpty()){
                         mBinding.recyclerViewQueries.visibility = View.VISIBLE
-                        mAdapterQueries = QueryAdapter(queries.reversed())
+                        mAdapterQueries = QueryAdapter(queries.reversed(), this)
                         mBinding.recyclerViewQueries.layoutManager = LinearLayoutManager(this)
                         mBinding.recyclerViewQueries.adapter=mAdapterQueries
                     }
@@ -115,13 +112,21 @@ class MainActivity : AppCompatActivity() {
                 mViewModelRoom.listQueries.observe(this, Observer {queries ->
                     if(queries.isNotEmpty()){
                         mBinding.recyclerViewQueries.visibility = View.VISIBLE
-                        mAdapterQueries = QueryAdapter(queries.reversed())
+                        mAdapterQueries = QueryAdapter(queries.reversed(), this)
                         mBinding.recyclerViewQueries.layoutManager = LinearLayoutManager(this)
                         mBinding.recyclerViewQueries.adapter=mAdapterQueries
                     }
                 })
             }
         }
+    }
+
+    fun runSearch(query: QuerySearch){
+        mBinding.recyclerViewQueries.visibility = View.GONE
+        UseCaseRoomSearch.saveQueryRoom(query, application)
+        viewModelSearch.performSearch(query.title.trim())
+        viewModelSearch.mResponse.value = SearchResponse("", "", 0, ArrayList(), "", "", "")
+        disableViews()
     }
 
     fun disableViews(){
@@ -152,5 +157,10 @@ class MainActivity : AppCompatActivity() {
     private fun getViewModelRoom(): RoomViewModel {
         val factory = RoomViewModel.Factory(application)
         return ViewModelProviders.of(this, factory).get(RoomViewModel::class.java)
+    }
+
+    override fun onQueryClick(view: View, query: QuerySearch) {
+        runSearch(query)
+        mBinding.searchView.editText?.setText(query.title)
     }
 }
